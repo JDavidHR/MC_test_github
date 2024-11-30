@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mc_test/core/colors.dart';
 import 'package:mc_test/core/components/mcbutton.dart';
+import 'package:mc_test/login/login.dart';
 import 'package:mc_test/model/entity/answer.dart';
 import 'package:mc_test/model/entity/question.dart';
 import 'package:mc_test/page/functions_page.dart';
@@ -44,7 +45,49 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver {
 
   final Map<String, String> _selectedAnswers = {};
   final Map<String, double> _questionScores = {};
-  final ValueNotifier<bool> _dialogShown = ValueNotifier<bool>(false);
+  bool _dialogShown = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  void showAppOutOfFocusDialog() {
+    if (!_dialogShown) {
+      _dialogShown = true;
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('¡Ups!'),
+            content: const Text('Estás fuera de la aplicación.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  _dialogShown = false;
+                  Navigator.of(context).pop();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ),
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   bool get _isFormValid => _selectedAnswers.length == questions.length;
 
@@ -72,10 +115,7 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver {
     } else if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
       debugPrint('is focus: false');
-      showAppOutOfFocusDialog(
-        context: context,
-        dialogShown: _dialogShown,
-      );
+      showAppOutOfFocusDialog();
     }
   }
 
@@ -84,11 +124,8 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver {
     return VisibilityDetector(
       key: const Key('visibility_detector'),
       onVisibilityChanged: (visibilityInfo) {
-        if (visibilityInfo.visibleFraction == 0.0 && !_dialogShown.value) {
-          showAppOutOfFocusDialog(
-            context: context,
-            dialogShown: _dialogShown,
-          );
+        if (visibilityInfo.visibleFraction == 0.0 && !_dialogShown) {
+          showAppOutOfFocusDialog();
         }
       },
       child: Scaffold(

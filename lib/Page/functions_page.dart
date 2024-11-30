@@ -87,30 +87,3 @@ void calculateScores({
   debugPrint('Total Score: $totalScore');
   debugPrint('Average Score: $averageScore');
 }
-
-void showAppOutOfFocusDialog({
-  required BuildContext context,
-  required ValueNotifier<bool> dialogShown,
-}) {
-  if (!dialogShown.value) {
-    dialogShown.value = true;
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('¡Ups!'),
-          content: const Text('Estás fuera de la aplicación.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                dialogShown.value = false;
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
