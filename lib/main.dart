@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mc_test/Page/page.dart';
+import 'package:mc_test/login/login.dart';
+//import 'package:mc_test/page/page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const TestPage(),
+      home: const LoginPage(),
     );
   }
 }

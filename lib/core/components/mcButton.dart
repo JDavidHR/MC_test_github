@@ -6,6 +6,8 @@ class MCButton extends StatelessWidget {
   final String text;
   final Color? color;
   final Color textColor;
+  final double? width;
+  final double? height;
 
   const MCButton({
     super.key,
@@ -13,13 +15,15 @@ class MCButton extends StatelessWidget {
     required this.text,
     this.color,
     this.textColor = Colors.white,
+    this.width,
+    this.height,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 50,
-      height: 50,
+      width: width ?? 50,
+      height: height ?? 50,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
