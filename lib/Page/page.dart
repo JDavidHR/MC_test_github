@@ -60,7 +60,7 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver {
   }
 
   void showAppOutOfFocusDialog() {
-    if (!_dialogShown) {
+    if (!_dialogShown && mounted) {
       _dialogShown = true;
       showDialog(
         context: context,
