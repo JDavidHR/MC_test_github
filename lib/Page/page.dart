@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mc_test/core/colors.dart';
 import 'package:mc_test/core/components/mcbutton.dart';
 import 'package:mc_test/login/login.dart';
-import 'package:mc_test/model/entity/answer.dart';
-import 'package:mc_test/model/entity/question.dart';
+
+import 'package:mc_test/model/mock/mock_questions.dart';
 import 'package:mc_test/page/functions_page.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -22,27 +21,6 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> with WidgetsBindingObserver {
-  final List<Question> questions = [
-    Question(
-      id: 'q1',
-      label: 'What is the capital of France?',
-      answers: [
-        Answer(id: 'a1', label: 'Berlin'),
-        Answer(id: 'a2', label: 'Paris', isCorrect: true),
-        Answer(id: 'a3', label: 'Madrid'),
-      ],
-    ),
-    Question(
-      id: 'q2',
-      label: 'Which planet is known as the Red Planet?',
-      answers: [
-        Answer(id: 'a1', label: 'Earth'),
-        Answer(id: 'a2', label: 'Mars', isCorrect: true),
-        Answer(id: 'a3', label: 'Jupiter'),
-      ],
-    ),
-  ];
-
   final Map<String, String> _selectedAnswers = {};
   final Map<String, double> _questionScores = {};
   bool _dialogShown = false;
@@ -89,20 +67,21 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver {
     }
   }
 
-  bool get _isFormValid => _selectedAnswers.length == questions.length;
+  bool get _isFormValid =>
+      _selectedAnswers.length == MockQuestions.questions.length;
 
   void _submitTest() {
     if (_isFormValid) {
       calculateScores(
         selectedAnswers: _selectedAnswers,
-        questions: questions,
+        questions: MockQuestions.questions,
         questionScores: _questionScores,
       );
       generatePDF(
         name: widget.name ?? "",
         email: widget.email ?? "",
         selectedAnswers: _selectedAnswers,
-        questions: questions,
+        questions: MockQuestions.questions,
       );
     }
   }
@@ -150,9 +129,9 @@ class _TestPageState extends State<TestPage> with WidgetsBindingObserver {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        itemCount: questions.length,
+                        itemCount: MockQuestions.questions.length,
                         itemBuilder: (context, index) {
-                          final question = questions[index];
+                          final question = MockQuestions.questions[index];
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
